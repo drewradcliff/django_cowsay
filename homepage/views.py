@@ -10,14 +10,12 @@ def index(request):
     if request.method == "POST":
         form = AddTextForm(request.POST)
         form.save()
-
-    if Input.objects.all():
         text = Input.objects.all().last().text
-    else:
-        text = 'moo'
-    out = subprocess.check_output(['cowsay', text], text=True)
+        out = subprocess.check_output(['cowsay', text], text=True)
+        return render(request, "index.html", {"form": form, "out": out})
+
     form = AddTextForm()
-    return render(request, "index.html", {"form": form, "out": out})
+    return render(request, "index.html", {"form": form})
 
 def history(request):
     input = Input.objects.all()[::-1][0:10]
